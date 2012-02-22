@@ -1,4 +1,4 @@
-= Wicked Text =
+# Wicked Text #
 
 Wicked Text (which I originally called Wiki Text) is a fairly intuitive approach to writing plain text with some structure – paragraphs, emphasis, tables, bullets and numbering.  
 

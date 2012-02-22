@@ -31,6 +31,6 @@
         }
     ],
     "files": [
-        "jquery.wicked-text.js"
+        "jquery.wicked-text"
     ]
 }
