@@ -1,5 +1,5 @@
 /*
- * Kajabity Wicked Text Plugin for jQuery http://www.kajabity.com/jquery-wikitext/
+ * Kajabity Wicked Text Plugin for jQuery http://www.kajabity.com/wicked-text/
  * 
  * Copyright (c) 2011 Williams Technologies Limited
  * 
@@ -19,7 +19,7 @@
  * http://www.williams-technologies.co.uk
  */
 /**
- * @fileOverview Kajabity Wiki Text Plugin for jQuery
+ * @fileOverview Kajabity Wicked Text Plugin for jQuery
  * @author Simon J. Williams
  * @version: 0.3
  */
@@ -36,13 +36,13 @@
 	/**
 	 * jQuery Utility Function to convert Wiki formatted text to HTML.
 	 * 
-	 * @namespace Kajabity Wiki Text
+	 * @namespace Kajabity Wicked Text
 	 * @function
-	 * @param {string} text the Wiki text to be converted to HTML.
+	 * @param {string} text the Wicked text to be converted to HTML.
 	 * @return {string} HTML formatted text.
 	 * @memberOf jQuery
 	 */
-	jQuery.wikiText = function( text )
+	jQuery.wickedText = function( text )
 	{
 		// The source text with nulls/undefined taken care of.
 		var source = (text || '').toString();
@@ -248,7 +248,7 @@
 				if( offset < tokenArray.index )
 				{
 					// Add non-mark-up text.
-					formattedText += jQuery.wikiText.safeText( sourceToken
+					formattedText += jQuery.wickedText.safeText( sourceToken
 							.substring( offset, tokenArray.index ) );
 				}
 
@@ -262,7 +262,7 @@
 					}
 					else
 					{
-						formattedText += jQuery.wikiText.safeText( token );
+						formattedText += jQuery.wickedText.safeText( token );
 					}
 				}
 				else if( tn_monospace === token )
@@ -270,13 +270,13 @@
 					monospace = true;
 					formattedText += toggleFormatting( "monospace" );
 				}
-				else if( jQuery.wikiText.re_link.test( token ) )
+				else if( jQuery.wickedText.re_link.test( token ) )
 				{
-					formattedText += jQuery.wikiText.namedLink( token );
+					formattedText += jQuery.wickedText.namedLink( token );
 				}
-				else if( jQuery.wikiText.re_mail.test( token ) )
+				else if( jQuery.wickedText.re_mail.test( token ) )
 				{
-					formattedText += jQuery.wikiText.namedLink( token );
+					formattedText += jQuery.wickedText.namedLink( token );
 				}
 				else if( tn_bold === token )
 				{
@@ -323,17 +323,17 @@
 				}
 				else if( (nl_tokenArray = re_named_link.exec( token )) !== null )
 				{
-					formattedText += jQuery.wikiText.namedLink(
+					formattedText += jQuery.wickedText.namedLink(
 							nl_tokenArray[1], nl_tokenArray[10] );
 				}
 				else if( token[0] === "!" )
 				{
-					formattedText += jQuery.wikiText.safeText( token
+					formattedText += jQuery.wickedText.safeText( token
 							.substring( 1 ) );
 				}
 				else
 				{
-					formattedText += jQuery.wikiText.safeText( token );
+					formattedText += jQuery.wickedText.safeText( token );
 				}
 
 				offset = regexToken.lastIndex;
@@ -342,7 +342,7 @@
 			if( offset < sourceToken.length )
 			{
 				// Add trailing non-mark-up text.
-				formattedText += jQuery.wikiText.safeText( sourceToken
+				formattedText += jQuery.wickedText.safeText( sourceToken
 						.substring( offset ) );
 			}
 
@@ -392,7 +392,7 @@
 				}
 				else
 				{
-					html += jQuery.wikiText.safeText( line ) + "\n";
+					html += jQuery.wickedText.safeText( line ) + "\n";
 				}
 			}
 			else if( line.length === 0 || re_blank.test( line ) )
@@ -485,9 +485,9 @@
 	 * 
 	 * @param {string} text which may contain HTML mark-up characters.
 	 * @return {string} text with HTML mark-up characters escaped.
-	 * @memberOf jQuery.wikiText
+	 * @memberOf jQuery.wickedText
 	 */
-	jQuery.wikiText.safeText = function( text )
+	jQuery.wickedText.safeText = function( text )
 	{
 		return (text || '').replace( /&/g, "&amp;" ).replace( /</g, "&lt;" )
 				.replace( />/g, "&gt;" );
@@ -497,14 +497,14 @@
 	 * A regular expression which detects HTTP(S) and FTP URLs.
 	 * @type RegExp
 	 */
-	jQuery.wikiText.re_link = /^((ftp|https?):\/\/)[\-\w@:%_\+.~#?,&\/\/=]+$/;
+	jQuery.wickedText.re_link = /^((ftp|https?):\/\/)[\-\w@:%_\+.~#?,&\/\/=]+$/;
 
 	/**
 	 * A regular expression to match an email address with or without "mailto:"
 	 * in front.
 	 * @type RegExp
 	 */
-	jQuery.wikiText.re_mail = /^(mailto:)?([_.\w\-]+@([\w][\w\-]+\.)+[a-zA-Z]{2,3})$/;
+	jQuery.wickedText.re_mail = /^(mailto:)?([_.\w\-]+@([\w][\w\-]+\.)+[a-zA-Z]{2,3})$/;
 
 	/**
 	 * Create a HTML link from a URL and Display Text - default the display to
@@ -522,16 +522,16 @@
 	 *            or a relative URL.
 	 * @param {string} name
 	 * @return {string} text containing a HTML link tag.
-	 * @memberOf jQuery.wikiText
+	 * @memberOf jQuery.wickedText
 	 */
-	jQuery.wikiText.namedLink = function( url, name )
+	jQuery.wickedText.namedLink = function( url, name )
 	{
 		var linkUrl;
 		var linkText;
 
-		if( !url ) { return jQuery.wikiText.safeText( name ); }
+		if( !url ) { return jQuery.wickedText.safeText( name ); }
 
-		if( jQuery.wikiText.re_mail.test( url ) )
+		if( jQuery.wickedText.re_mail.test( url ) )
 		{
 			url = url.replace( /mailto:/, "" );
 			linkUrl = encodeURI( "mailto:" + url );
@@ -546,7 +546,7 @@
 			name = decodeURI( url );
 		}
 
-		linkText = jQuery.wikiText.safeText( name );
+		linkText = jQuery.wickedText.safeText( name );
 		return linkText.link( linkUrl );
 	};
 
@@ -569,8 +569,8 @@
 	 * @return {jQuery} chainable jQuery class
 	 * @memberOf jQuery.fn
 	 */
-	jQuery.fn.wikiText = function( text )
+	jQuery.fn.wickedText = function( text )
 	{
-		return this.html( jQuery.wikiText( text ) );
+		return this.html( jQuery.wickedText( text ) );
 	};
 })( jQuery );

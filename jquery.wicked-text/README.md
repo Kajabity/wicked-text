@@ -1,8 +1,4 @@
-# jQuery Plugins by Kajabity #
-
-A project collecting together some jQuery plugins.
-
-## Wicked Text ##
+# Kajabity Wicked Text Plugin for jQuery #
 
 The Wicked Text plugin for jQuery enables plain text to be converted to HTML using very simple Wiki style markup.
 

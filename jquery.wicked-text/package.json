@@ -1,7 +1,7 @@
 {
     "name": "wicked-text",
     "version": "0.3.0",
-    "title": "jQuery Wicked Text",
+    "title": "Kajabity Wicked Text plugin for jQuery",
     "author": {
         "name": "Simon J. Williams",
         "email": "simon@kajabity.com"
@@ -22,8 +22,7 @@
         "text",
         "html"
     ],
-    "homepage": "http://www.kajabity.com/jquery-wikitext/",
-    "demo": "http://www.kajabity.com/jquery-wikitext/wikitext-test.html"
+    "homepage": "http://www.kajabity.com/wicked-text/",
     "maintainers": [
         {
 	        "name": "Simon J. Williams",

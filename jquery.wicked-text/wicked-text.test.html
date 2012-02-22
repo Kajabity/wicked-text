@@ -12,7 +12,7 @@ textarea {
 	margin: 10px;
 }
 
-#wikioutput {
+#wickedOutput {
 	border: 1px gray solid;
 	margin: 10px;
 	padding: 10px;
@@ -20,14 +20,14 @@ textarea {
 	width: 600px;
 }
 
-#wikioutput pre {
+#wickedOutput pre {
 	overflow: auto;
 	width: 500px;
 	border: 1px blue solid;
 	padding: 5px;
 }
 
-#wikiHTML {
+#wickedHTML {
 	border: 1px gray solid;
 	margin: 10px;
 	padding: 10px;
@@ -47,8 +47,8 @@ textarea {
 	{
 		function updateHtml( text )
 		{
-			$( '#wikioutput' ).wikiText( text );
-			$( '#wikiHTML' ).html( $.wikiText.safeText( $.wikiText( text ) ) );
+			$( '#wickedOutput' ).wickedText( text );
+			$( '#wickedHTML' ).html( $.wickedText.safeText( $.wickedText( text ) ) );
 		}
 
 		$( '#plaintext' ).keyup( function()
@@ -66,20 +66,20 @@ textarea {
 </head>
 <body>
 
-<h1>WIKI Text Plugin for jQuery Test Page</h1>
+<h1>Wicked Text Plugin for jQuery Test Page</h1>
 
 <form id="testform">
 <p><label>Edit the text in the text area to see the resulting output and the HTML below.</label></p>
 <div><a id="clear" href="#" alt="Click to clear all content from the text area.">Clear</a></div>
 
-<textarea id="plaintext" cols="80" rows="15">Enter Wiki Text in here...</textarea>
+<textarea id="plaintext" cols="80" rows="15">Enter plain text in here in a Wicked way...</textarea>
 </form>
 
 <p>View the results here:</p>
 
-<div id="wikioutput"></div>
+<div id="wickedOutput"></div>
 <p></p>
-<pre id="wikiHTML">
+<pre id="wickedHTML">
 </pre>
 </body>
 </html>
