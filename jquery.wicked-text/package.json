@@ -1,0 +1,37 @@
+{
+    "name": "wikitext",
+    "version": "0.3.0",
+    "title": "jQuery Wiki Text",
+    "author": {
+        "name": "Simon J. Williams",
+        "email": "simon@kajabity.com"
+        "url": "http://www.kajabity.com/"
+    },
+    "licenses": [
+        {
+            "type": "Apache-2.0",
+            "url": "http://www.apache.org/licenses/LICENSE-2.0"
+        }
+    ],
+    "dependencies": {
+        "jquery": "*"
+    },
+    "description": "The Wiki Text plugin for jQuery enables plain text to be converted to HTML using very simple Wiki style markup.",
+    "keywords": [
+        "wiki",
+        "text",
+        "html"
+    ],
+    "homepage": "http://www.kajabity.com/jquery-wikitext/",
+    "demo": "http://www.kajabity.com/jquery-wikitext/wikitext-test.html"
+    "maintainers": [
+        {
+	        "name": "Simon J. Williams",
+	        "email": "simon@kajabity.com"
+	        "url": "http://www.kajabity.com/"
+        }
+    ],
+    "files": [
+        "jquery-wikitext.js"
+    ]
+}

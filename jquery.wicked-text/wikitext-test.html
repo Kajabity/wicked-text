@@ -1,0 +1,85 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml">
+<head>
+<!-- saved from url=(0024)http://www.kajabity.com/ -->
+<meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
+<title>Wiki Text Plugin for jQuery Test Page</title>
+
+<style type="text/css">
+textarea {
+	width: 600px;
+	margin: 10px;
+}
+
+#wikioutput {
+	border: 1px gray solid;
+	margin: 10px;
+	padding: 10px;
+	background-color: #efe;
+	width: 600px;
+}
+
+#wikioutput pre {
+	overflow: auto;
+	width: 500px;
+	border: 1px blue solid;
+	padding: 5px;
+}
+
+#wikiHTML {
+	border: 1px gray solid;
+	margin: 10px;
+	padding: 10px;
+	width: 600px;
+	overflow: auto;
+}
+</style>
+
+<!-- 
+<script type="text/javascript" src="http://ajax.googleapis.com/ajax/libs/jquery/1.5.1/jquery.min.js"></script>
+ -->
+<script type="text/javascript" src="jquery.js"></script>
+<script type="text/javascript" src="jquery-wikitext-0.3.js"></script>
+
+<script type="text/javascript">
+	$( function()
+	{
+		function updateHtml( text )
+		{
+			$( '#wikioutput' ).wikiText( text );
+			$( '#wikiHTML' ).html( $.wikiText.safeText( $.wikiText( text ) ) );
+		}
+
+		$( '#plaintext' ).keyup( function()
+		{
+			updateHtml( $( this ).val() );
+		} );
+
+		$( "#clear" ).click( function()
+		{
+			$( '#plaintext' ).val( "" );
+			updateHtml( $( '#plaintext' ).val() );
+		} );
+	} );
+</script>
+</head>
+<body>
+
+<h1>WIKI Text Plugin for jQuery Test Page</h1>
+
+<form id="testform">
+<p><label>Edit the text in the text area to see the resulting output and the HTML below.</label></p>
+<div><a id="clear" href="#" alt="Click to clear all content from the text area.">Clear</a></div>
+
+<textarea id="plaintext" cols="80" rows="15">Enter Wiki Text in here...</textarea>
+</form>
+
+<p>View the results here:</p>
+
+<div id="wikioutput"></div>
+<p></p>
+<pre id="wikiHTML">
+</pre>
+</body>
+</html>
