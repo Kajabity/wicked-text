@@ -1,7 +1,7 @@
 {
-    "name": "wikitext",
+    "name": "wicked-text",
     "version": "0.3.0",
-    "title": "jQuery Wiki Text",
+    "title": "jQuery Wicked Text",
     "author": {
         "name": "Simon J. Williams",
         "email": "simon@kajabity.com"
@@ -16,7 +16,7 @@
     "dependencies": {
         "jquery": "*"
     },
-    "description": "The Wiki Text plugin for jQuery enables plain text to be converted to HTML using very simple Wiki style markup.",
+    "description": "The Wicked Text plugin for jQuery enables plain text to be converted to HTML using very simple Wiki style markup.",
     "keywords": [
         "wiki",
         "text",
@@ -32,6 +32,6 @@
         }
     ],
     "files": [
-        "jquery-wikitext.js"
+        "jquery.wicked-text.js"
     ]
 }

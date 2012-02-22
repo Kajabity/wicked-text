@@ -1,5 +1,5 @@
 /*
- * Kajabity Wiki Text Plugin for jQuery http://www.kajabity.com/jquery-wikitext/
+ * Kajabity Wicked Text Plugin for jQuery http://www.kajabity.com/jquery-wikitext/
  * 
  * Copyright (c) 2011 Williams Technologies Limited
  * 

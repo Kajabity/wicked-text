@@ -2,9 +2,9 @@
 
 A project collecting together some jQuery plugins.
 
-## Wiki Text ##
+## Wicked Text ##
 
-The Wiki Text plugin for jQuery enables plain text to be converted to HTML using very simple Wiki style markup.
+The Wicked Text plugin for jQuery enables plain text to be converted to HTML using very simple Wiki style markup.
 
 The plugin provides the following features: -
 
@@ -15,15 +15,15 @@ In addition, one or two constants and functions have been made accessible from t
 
 You can try out the plugin on the Wiki Test page and see the results in real time (it's quite fast, too).
 
-Wiki Text uses a very simple textual mark-up syntax used for generating web pages. It is designed to be easy for non-technical 
-users to write and edit and still produce rich, structured HTML content.  The Wiki format is converted to simple, clean HTML - 
+Wicked Text uses a very simple textual mark-up syntax used for generating web pages. It is designed to be easy for non-technical 
+users to write and edit and still produce rich, structured HTML content.  The Wicked Text format is converted to simple, clean HTML - 
 it is then up to the page's CSS styling to determine how the HTML is presented.
 
 Full documentation is available at [http://www.kajabity.com/jquery-wikitext/](http://www.kajabity.com/jquery-wikitext/)
 
 ### Licence ###
 
-Wiki Text Plugin for jQuery is licensed under the Apache License, Version 2.0 (the "License"); you may not use this file 
+Wicked Text Plugin for jQuery is licensed under the Apache License, Version 2.0 (the "License"); you may not use this file 
 except in compliance with the License. You may obtain a copy of the License at
 
 *    [http://www.apache.org/licenses/LICENSE-2.0](http://www.apache.org/licenses/LICENSE-2.0)
