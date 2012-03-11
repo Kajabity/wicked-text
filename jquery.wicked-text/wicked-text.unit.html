@@ -1,0 +1,1267 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml">
+<head>
+<!-- saved from url=(0024)http://www.kajabity.com/ -->
+<meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
+<title>Wicked Text Plugin for jQuery Unit Tests</title>
+
+<style type="text/css">
+#no-js-warning {
+	font-style: italic;
+	font-weight: bold;
+	background-color: yellow;
+	text-align: center;
+	width: 80%;
+}
+table {
+	border-collapse: collapse;
+	border: 0px;
+}
+th {
+	background-color: silver;
+	border: 1px gray solid;
+	padding: 3px 5px;
+}
+td {
+	border: 1px gray solid;
+	padding: 3px 5px;
+	background-color: white;
+}
+.test td {
+}
+.test pre {
+	color:blue;
+}
+.test tt {
+	color:maroon;
+}
+#summary {
+}
+#summary td {
+	text-align: center;
+}
+.tests {
+	background-color: white;
+}
+.success {
+	background-color: #ddffdd;
+}
+.fail {
+	background-color: #ffdddd;
+}
+</style>
+<script type="text/javascript"
+	src="http://ajax.googleapis.com/ajax/libs/jquery/1.5.1/jquery.min.js"></script>
+<script type="text/javascript" src="jquery.wicked-text.js"></script>
+
+<script type="text/javascript">
+	function runTests()
+	{
+		//	Initialise variables.
+		var countTests = 0;
+		var countSuccess = 0;
+		var countFail = 0;
+
+		//	Iterate through each test row.
+		$( "tr.test" ).each(
+				function(index, element)
+				{
+					countTests++;
+
+					//	get the source
+					var source = $( "td:nth-child(2)>pre", this ).text();
+
+					//	get the expected output
+					var expected = $.trim( $( "td:nth-child(3)>pre", this )
+							.text() );
+
+					//	call wicked text to get output
+					var result = $.trim( $.wickedText( source ) );
+
+					var resultClass = "success";
+
+					//	compare
+					if( result === expected )
+					{
+						//		if same, increment success count - set success class
+						countSuccess++;
+					}
+					else
+					{
+						//		if different, increment fail count - set fail class
+						countFail++;
+						resultClass = "fail";
+					}
+
+					//	Append actual result to final cell and set result class
+					$( "td", this ).addClass( resultClass );
+					$( "td:nth-child(4)", this ).append(
+							$( "<pre></pre>" ).html(
+									$.wickedText.safeText( result ) ) );
+				} );
+
+		// Finally, set the values in the summary table.
+		$("#countTests").text( countTests );
+		$("#countSuccess").text( countSuccess );
+		$("#countFail").text( countFail );
+		
+		$( "#summary tbody td" ).addClass( countFail > 0 ? "fail" : "success" );
+	}
+
+	jQuery( document ).ready( function($)
+	{
+		$( "#no-js-warning" ).hide();
+		runTests();
+	} );
+</script>
+</head>
+<body>
+
+	<h1>Wicked Text Plugin for jQuery Unit Tests</h1>
+
+	<p id="no-js-warning">This page implements unit tests for
+		JavaScript software. It will not work at all if JavaScript
+		(ECMAScript) is disabled. Please enable JavaScript and reload the page
+		so the tests can run.</p>
+
+	<p>This page contains a series of Unit Tests for the Wicked Text
+		Plugin for jQuery. They will execute automatically when the page loads
+		and the results are shown below.</p>
+
+	<h2>Unit Test Summary</h2>
+	
+	<table id="summary">
+		<thead>
+			<tr>
+				<th>Total Tests</th>
+				<th>Successful Tests</th>
+				<th>Failed Tests</th>
+			</tr>
+		</thead>
+		<tbody>
+			<tr>
+				<td id="countTests">0</td>
+				<td id="countSuccess">0</td>
+				<td id="countFail">0</td>
+			</tr>
+		</tbody>
+	</table>
+
+	<h2>Unit Tests</h2>
+
+	<h3>Paragraphs</h3>
+
+	<table class="tests">
+		<thead>
+			<tr>
+				<th>Test</th>
+				<th>Wicked Text Input</th>
+				<th>Expected Output</th>
+				<th>Actual Output</th>
+			</tr>
+		</thead>
+		<tbody>
+			<tr class="test">
+				<td>empty input</td>
+				<td><pre></pre></td>
+				<td><pre></pre></td>
+				<td></td>
+			</tr>
+			<tr class="test">
+				<td>single line paragraph</td>
+				<td><pre>Once upon a time...</pre></td>
+				<td><pre>&lt;p&gt;
+Once upon a time...
+&lt;/p&gt;</pre></td>
+				<td></td>
+			</tr>
+			<tr class="test">
+				<td>wrapped paragraph</td>
+				<td><pre>Once upon a time
+there were three little pigs</pre></td>
+				<td><pre>&lt;p&gt;
+Once upon a time
+there were three little pigs
+&lt;/p&gt;</pre></td>
+				<td></td>
+			</tr>
+			<tr class="test">
+				<td>two paragraphs</td>
+				<td><pre>Once upon a time
+there were three little pigs
+
+They lived with their parents 
+in a nice little house.
+				</pre></td>
+				<td><pre>&lt;p&gt;
+Once upon a time
+there were three little pigs
+&lt;/p&gt;
+&lt;p&gt;
+They lived with their parents 
+in a nice little house.
+&lt;/p&gt;</pre></td>
+				<td></td>
+			</tr>
+			<tr class="test">
+				<td>multiple blank lines</td>
+				<td><pre>Once upon a time
+there were three little pigs
+
+
+
+They lived with their parents 
+in a nice little house.</pre></td>
+				<td><pre>&lt;p&gt;
+Once upon a time
+there were three little pigs
+&lt;/p&gt;
+&lt;p&gt;
+They lived with their parents 
+in a nice little house.
+&lt;/p&gt;</pre></td>
+				<td></td>
+			</tr>
+		</tbody>
+	</table>
+	
+	<h3>Line Breaks</h3>
+	<table class="tests">
+			<tr>
+				<th>Test</th>
+				<th>Wicked Text Input</th>
+				<th>Expected Output</th>
+				<th>Actual Output</th>
+			</tr>
+			<tr class="test">
+				<td>line break</td>
+				<td>
+				<pre>A paragraph which you want to break[[BR]]here onto the next line</pre>
+				</td>
+				<td><pre>&lt;p&gt;
+A paragraph which you want to break&lt;br/&gt;here onto the next line
+&lt;/p&gt;</pre></td>
+				<td></td>
+			</tr>
+			<tr class="test">
+				<td>multiple line breaks</td>
+				<td>
+				<pre>A paragraph which you want to break[[BR]]here onto the next line and then[[BR]]again</pre>
+				</td>
+				<td><pre>&lt;p&gt;
+A paragraph which you want to break&lt;br/&gt;here onto the next line and then&lt;br/&gt;again
+&lt;/p&gt;</pre></td>
+				<td></td>
+			</tr>
+	</table>
+	
+	<p>TODO: Improve syntax to make it more obvious in plain text.</p>
+	<h3>Headings</h3>
+	<table class="tests">
+			<tr>
+				<th>Test</th>
+				<th>Wicked Text Input</th>
+				<th>Expected Output</th>
+				<th>Actual Output</th>
+			</tr>
+			<tr class="test">
+				<td>heading 1</td>
+				<td>
+				<pre>= Heading 1 =</pre>
+				</td>
+				<td><pre>&lt;h1&gt;Heading 1 &lt;/h1&gt;</pre></td>
+				<td></td>
+			</tr>
+			<tr class="test">
+				<td>heading 2</td>
+				<td>
+				<pre>== Heading 2 ==</pre>
+				</td>
+				<td><pre>&lt;h2&gt;Heading 2 &lt;/h2&gt;</pre></td>
+				<td></td>
+			</tr>
+			<tr class="test">
+				<td>heading 3</td>
+				<td>
+				<pre>===  Heading 3 ===</pre>
+				</td>
+				<td><pre>&lt;h3&gt;Heading 3 &lt;/h3&gt;</pre></td>
+				<td></td>
+			</tr>
+			<tr class="test">
+				<td>heading 4</td>
+				<td>
+				<pre>==== Heading 4 ====</pre>
+				</td>
+				<td><pre>&lt;h4&gt;Heading 4 &lt;/h4&gt;</pre></td>
+				<td></td>
+			</tr>
+			<tr class="test">
+				<td>heading 5</td>
+				<td>
+				<pre>===== Heading 5 =====</pre>
+				</td>
+				<td><pre>&lt;h5&gt;Heading 5 &lt;/h5&gt;</pre></td>
+				<td></td>
+			</tr>
+			<tr class="test">
+				<td>heading 6</td>
+				<td>
+				<pre>====== Heading 6 ======</pre>
+				</td>
+				<td><pre>&lt;h6&gt;Heading 6 &lt;/h6&gt;</pre></td>
+				<td></td>
+			</tr>
+			<tr class="test">
+				<td>not heading 7</td>
+				<td>
+				<pre>======= Heading 7 =======</pre>
+				</td>
+				<td><pre>&lt;p&gt;
+======= Heading 7 =======
+&lt;/p&gt;</pre></td>
+				<td></td>
+			</tr>
+			<tr class="test">
+				<td>must be no spaces at start of line (treated as blockquote)</td>
+				<td>
+				<pre>
+ = Heading 1 =
+</pre>
+				</td>
+				<td>
+				<pre>&lt;blockquote&gt;
+= Heading 1 =
+&lt;/blockquote&gt;</pre>
+				</td>
+				<td></td>
+			</tr>
+			<tr class="test">
+				<td>require space after first group of equals</td>
+				<td>
+				<pre>==Heading 2 ==</pre>
+				</td>
+				<td>
+				<pre>&lt;p&gt;
+==Heading 2 ==
+&lt;/p&gt;</pre>
+				</td>
+				<td></td>
+			</tr>
+			</table>
+	
+	<p>TODO: Check space after heading and none after final ===.&nbsp; Check 
+	matching number of ===</p>
+	<h3>Block Quotes</h3>
+	<table class="tests">
+			<tr>
+				<th>Test</th>
+				<th>Wicked Text Input</th>
+				<th>Expected Output</th>
+				<th>Actual Output</th>
+			</tr>
+			<tr class="test">
+				<td>single line starting with a space</td>
+				<td><pre> single line starting with a space</pre></td>
+				<td>
+				<pre id="wickedHTML">&lt;blockquote&gt;
+single line starting with a space
+&lt;/blockquote&gt;</pre>
+				</td>
+				<td></td>
+			</tr>
+			<tr class="test">
+				<td>wrapped lines starting with space<br />
+				on both lines</td>
+				<td><pre> wrapped lines starting with space
+ on both lines</pre></td>
+				<td>
+				<pre id="wickedHTML1">&lt;blockquote&gt;
+wrapped lines starting with space
+on both lines
+&lt;/blockquote&gt;</pre>
+				</td>
+				<td></td>
+			</tr>
+			<tr class="test">
+				<td>single line starting with a tab</td>
+				<td><pre>	single line starting with a tab</pre></td>
+				<td>
+				<pre id="wickedHTML0">&lt;blockquote&gt;
+single line starting with a tab
+&lt;/blockquote&gt;</pre>
+				</td>
+				<td></td>
+			</tr>
+			<tr class="test">
+				<td>a paragraph
+ immediately followed by a blockquote
+and another paragraph</td>
+				<td><pre>a paragraph
+ immediately followed by a blockquote
+and another paragraph</pre></td>
+				<td>
+				<pre id="wickedHTML2">&lt;p&gt;
+a paragraph
+&lt;/p&gt;
+&lt;blockquote&gt;
+immediately followed by a blockquote
+&lt;/blockquote&gt;
+&lt;p&gt;
+and another paragraph
+&lt;/p&gt;</pre>
+				</td>
+				<td></td>
+			</tr>
+			<tr class="test">
+				<td> a blockquote
+
+ and another blockquote</td>
+				<td><pre> a blockquote
+
+ and another blockquote</pre></td>
+				<td>
+				<pre id="wickedHTML3">&lt;blockquote&gt;
+a blockquote
+&lt;/blockquote&gt;
+&lt;blockquote&gt;
+and another blockquote
+&lt;/blockquote&gt;</pre>
+				</td>
+				<td></td>
+			</tr>
+	</table>
+	
+	<h3>Preformatted Text Block</h3>
+<table class="tests">
+		<thead>
+			<tr>
+				<th>Test</th>
+				<th>Wicked Text Input</th>
+				<th>Expected Output</th>
+				<th>Actual Output</th>
+			</tr>
+		</thead>
+		<tbody>
+			<tr class="test">
+				<td>a preformatted text block</td>
+				<td><pre>{{{
+This is preformatted text
+}}}</pre></td>
+				<td><pre>&lt;pre&gt;
+This is preformatted text
+&lt;/pre&gt;
+</pre></td>
+				<td></td>
+			</tr><tr class="test">
+				<td>ignore other markup</td>
+				<td><pre>{{{
+== a heading - should be ignored ==
+
+Text markup ''bold'' '''italic''' {{{code}}} should be ignored too.
+}}}</pre></td>
+				<td><pre>&lt;pre&gt;
+== a heading - should be ignored ==
+
+Text markup ''bold'' '''italic''' {{{code}}} should be ignored too.
+&lt;/pre&gt;
+</pre></td>
+				<td></td>
+			</tr><tr class="test">
+				<td>ignore special characters</td>
+				<td><pre>{{{
+&lt;h1&gt;Ignore Headings&lt;/h1&gt;
+&lt;hr/&gt;
+&lt;p&gt;&lt;strong&gt;Even BOLD text&lt;/strong&gt;&lt;/p&gt;
+}}}</pre></td>
+				<td><pre>&lt;pre&gt;
+&amp;lt;h1&amp;gt;Ignore Headings&amp;lt;/h1&amp;gt;
+&amp;lt;hr/&amp;gt;
+&amp;lt;p&amp;gt;&amp;lt;strong&amp;gt;Even BOLD text&amp;lt;/strong&amp;gt;&amp;lt;/p&amp;gt;
+&lt;/pre&gt;
+</pre></td>
+				<td></td>
+			</tr>
+			<tr class="test">
+				<td>Unterminated preformatted text</td>
+				<td><pre>{{{
+This is unterminated preformatted text</pre></td>
+				<td><pre>&lt;pre&gt;
+This is unterminated preformatted text
+&lt;/pre&gt;
+</pre></td>
+				<td></td>
+			</tr><tr class="test">
+				<td>whitespace after closing markup</td>
+				<td><pre>{{{
+This is preformatted text
+}}} </pre></td>
+				<td><pre>&lt;pre&gt;
+This is preformatted text
+}}} 
+&lt;/pre&gt;
+</pre></td>
+				<td></td>
+			</tr><tr class="test">
+				<td>whitespace before closing markup</td>
+				<td><pre>{{{
+This is preformatted text
+ }}}
+</pre></td>
+				<td><pre>&lt;pre&gt;
+This is preformatted text
+ }}}
+&lt;/pre&gt;
+</pre></td>
+				<td></td>
+			</tr><tr class="test">
+				<td>spaces after opening markup</td>
+				<td><pre>{{{ 
+This is preformatted text
+}}}</pre></td>
+				<td><pre>&lt;p&gt;
+&lt;tt&gt; 
+This is preformatted text
+&lt;/tt&gt;
+&lt;/p&gt;
+</pre></td>
+				<td></td>
+			</tr><tr class="test">
+				<td>spaces before opening markup</td>
+				<td><pre> {{{
+This is preformatted text
+}}}</pre></td>
+				<td><pre>&lt;blockquote&gt;
+&lt;tt&gt;&lt;/tt&gt;
+&lt;/blockquote&gt;
+&lt;p&gt;
+&lt;tt&gt;This is preformatted text
+&lt;/tt&gt;
+&lt;/p&gt;
+</pre></td>
+				<td></td>
+			</tr>
+		</tbody>
+	</table>
+	
+	<h3>Ordered Lists</h3>
+<table class="tests">
+		<thead>
+			<tr>
+				<th>Test</th>
+				<th>Wicked Text Input</th>
+				<th>Expected Output</th>
+				<th>Actual Output</th>
+			</tr>
+		</thead>
+		<tbody>
+			<tr class="test">
+				<td>basic ordered list</td>
+				<td><pre> # a list item in an ordered list
+ # a second list item in an ordered list</pre></td>
+				<td><pre>&lt;ol&gt;
+&lt;li&gt;a list item in an ordered list&lt;/li&gt;
+&lt;li&gt;a second list item in an ordered list&lt;/li&gt;
+&lt;/ol&gt;
+</pre></td>
+				<td></td>
+			</tr>
+			<tr class="test">
+				<td>unordered list between paragraphs</td>
+				<td><pre>paragraph immediately before
+ # a list item in an ordered list
+ # a second list item in an ordered list
+paragraph immediately after</pre></td>
+				<td><pre>&lt;p&gt;
+paragraph immediately before
+&lt;/p&gt;
+&lt;ol&gt;
+&lt;li&gt;a list item in an ordered list&lt;/li&gt;
+&lt;li&gt;a second list item in an ordered list&lt;/li&gt;
+&lt;/ol&gt;
+&lt;p&gt;
+paragraph immediately after
+&lt;/p&gt;
+</pre></td>
+				<td></td>
+			</tr>
+			<tr class="test">
+				<td>blank lines between list items</td>
+				<td><pre> # a list item in an ordered list
+
+ # a second list item in an ordered list after a blank line</pre></td>
+				<td><pre>&lt;ol&gt;
+&lt;li&gt;a list item in an ordered list&lt;/li&gt;
+&lt;/ol&gt;
+&lt;ol&gt;
+&lt;li&gt;a second list item in an ordered list after a blank line&lt;/li&gt;
+&lt;/ol&gt;
+</pre></td>
+				<td></td>
+			</tr>
+			<tr class="test">
+				<td>wrapped list items</td>
+				<td><pre> # a list item in an ordered list
+ # a second list item in an ordered list 
+ wrapped onto the second line
+          or even the third
+	number of spaces or tabs doesn't matter</pre></td>
+				<td><pre>&lt;ol&gt;
+&lt;li&gt;a list item in an ordered list&lt;/li&gt;
+&lt;li&gt;a second list item in an ordered list 
+wrapped onto the second line
+or even the third
+number of spaces or tabs doesn't matter&lt;/li&gt;
+&lt;/ol&gt;
+</pre></td>
+				<td></td>
+			</tr>
+			<tr class="test">
+				<td>missing space at start of line</td>
+				<td><pre># not quite a list item in an ordered list</pre></td>
+				<td><pre>&lt;p&gt;
+# not quite a list item in an ordered list
+&lt;/p&gt;
+</pre></td>
+				<td></td>
+			</tr>
+			<tr class="test">
+				<td>missing space after hash</td>
+				<td><pre> #not quite a list item in an ordered list</pre></td>
+				<td><pre>&lt;blockquote&gt;
+#not quite a list item in an ordered list
+&lt;/blockquote&gt;
+</pre></td>
+				<td></td>
+			</tr>
+		</tbody>
+	</table>	
+	<h3>Unordered Lists</h3>
+<table class="tests">
+		<thead>
+			<tr>
+				<th>Test</th>
+				<th>Wicked Text Input</th>
+				<th>Expected Output</th>
+				<th>Actual Output</th>
+			</tr>
+		</thead>
+		<tbody>
+			<tr class="test">
+				<td>basic unordered list</td>
+				<td><pre> * an item in an unordered list
+ * another item in an unordered list </pre></td>
+				<td><pre>&lt;ul&gt;
+&lt;li&gt;an item in an unordered list&lt;/li&gt;
+&lt;li&gt;another item in an unordered list &lt;/li&gt;
+&lt;/ul&gt;
+</pre></td>
+				<td></td>
+			</tr><tr class="test">
+				<td>unordered list between paragraphs</td>
+				<td><pre>paragraph before
+ * an item in an unordered list
+ * another item in an unordered list 
+paragraph after</pre></td>
+				<td><pre>&lt;p&gt;
+paragraph before
+&lt;/p&gt;
+&lt;ul&gt;
+&lt;li&gt;an item in an unordered list&lt;/li&gt;
+&lt;li&gt;another item in an unordered list &lt;/li&gt;
+&lt;/ul&gt;
+&lt;p&gt;
+paragraph after
+&lt;/p&gt;
+</pre></td>
+				<td></td>
+			</tr><tr class="test">
+				<td>blank lines between list items</td>
+				<td><pre> * an item in an unordered list
+
+ * another item in a separate unordered list 
+</pre></td>
+				<td><pre>&lt;ul&gt;
+&lt;li&gt;an item in an unordered list&lt;/li&gt;
+&lt;/ul&gt;
+&lt;ul&gt;
+&lt;li&gt;another item in a separate unordered list &lt;/li&gt;
+&lt;/ul&gt;
+</pre></td>
+				<td></td>
+			</tr><tr class="test">
+				<td>wrapped list items</td>
+				<td><pre> * an item in an unordered list
+ * another item in an unordered list 
+ wrapped onto the second line
+          or even the third
+	number of spaces or tabs doesn't matter</pre></td>
+				<td><pre>&lt;ul&gt;
+&lt;li&gt;an item in an unordered list&lt;/li&gt;
+&lt;li&gt;another item in an unordered list 
+wrapped onto the second line
+or even the third
+number of spaces or tabs doesn't matter&lt;/li&gt;
+&lt;/ul&gt;
+</pre></td>
+				<td></td>
+			</tr><tr class="test">
+				<td>missing space at start of line</td>
+				<td><pre>* not quite an item in an unordered list
+</pre></td>
+				<td><pre>&lt;p&gt;
+* not quite an item in an unordered list
+&lt;/p&gt;
+</pre></td>
+				<td></td>
+			</tr><tr class="test">
+				<td>missing space after asterisk</td>
+				<td><pre> *not quite an item in an unordered list
+</pre></td>
+				<td><pre>&lt;blockquote&gt;
+*not quite an item in an unordered list
+&lt;/blockquote&gt;
+</pre></td>
+				<td></td>
+			</tr>
+		</tbody>
+	</table>
+		
+	<h3>Horizontal Rules</h3>
+	
+<table class="tests">
+		<thead>
+			<tr>
+				<th>Test</th>
+				<th>Wicked Text Input</th>
+				<th>Expected Output</th>
+				<th>Actual Output</th>
+			</tr>
+		</thead>
+		<tbody>
+			<tr class="test">
+				<td>a horizontal rule</td>
+				<td><pre>----</pre></td>
+				<td><pre>&lt;hr/&gt;
+</pre></td>
+				<td></td>
+			</tr><tr class="test">
+				<td>a horizontal rule with more than 4 dashes</td>
+				<td><pre>----------------------------------------------------------</pre></td>
+				<td><pre>&lt;hr/&gt;
+</pre></td>
+				<td></td>
+			</tr><tr class="test">
+				<td>fail if space before dashes</td>
+				<td><pre> -------</pre></td>
+				<td><pre>&lt;blockquote&gt;
+-------
+&lt;/blockquote&gt;
+</pre></td>
+				<td></td>
+			</tr><tr class="test">
+				<td>fail if space after dashes</td>
+				<td><pre>------- </pre></td>
+				<td><pre>&lt;p&gt;
+------- 
+&lt;/p&gt;
+</pre></td>
+				<td></td>
+			</tr><tr class="test">
+				<td>fail if space between dashes</td>
+				<td><pre>--- ----</pre></td>
+				<td><pre>&lt;p&gt;
+--- ----
+&lt;/p&gt;
+</pre></td>
+				<td></td>
+			</tr><tr class="test">
+				<td>fail if less than four dashes</td>
+				<td><pre>---</pre></td>
+				<td><pre>&lt;p&gt;
+---
+&lt;/p&gt;
+</pre></td>
+				<td></td>
+			</tr><tr class="test">
+				<td>fail if chars other than dashes dashes</td>
+				<td><pre>---===---</pre></td>
+				<td><pre>&lt;p&gt;
+---===---
+&lt;/p&gt;
+</pre></td>
+				<td></td>
+			</tr>
+		</tbody>
+	</table>
+
+	<h3>Font Styles</h3>
+
+<table class="tests">
+		<thead>
+			<tr>
+				<th>Test</th>
+				<th>Wicked Text Input</th>
+				<th>Expected Output</th>
+				<th>Actual Output</th>
+			</tr>
+		</thead>
+		<tbody>
+			<tr class="test">
+				<td>italic text</td>
+				<td><pre>a small ''amount of italic'' text</pre></td>
+				<td><pre>&lt;p&gt;
+a small &lt;em&gt;amount of italic&lt;/em&gt; text
+&lt;/p&gt;
+</pre></td>
+				<td></td>
+			</tr><tr class="test">
+				<td>bold text</td>
+				<td><pre>a small '''amount of bold''' text</pre></td>
+				<td><pre>&lt;p&gt;
+a small &lt;strong&gt;amount of bold&lt;/strong&gt; text
+&lt;/p&gt;
+</pre></td>
+				<td></td>
+			</tr><tr class="test">
+				<td>italic and bold mixed text</td>
+				<td><pre>a small '''amount of bold ''and italic''''' text
+
+or ''italic and '''bold if you''''' like
+
+or '''start with bold ''and''' end with italic'' as well</pre></td>
+				<td><pre>&lt;p&gt;
+a small &lt;strong&gt;amount of bold &lt;em&gt;and italic&lt;/em&gt;&lt;/strong&gt; text
+&lt;/p&gt;
+&lt;p&gt;
+or &lt;em&gt;italic and &lt;strong&gt;bold if you&lt;/strong&gt;&lt;/em&gt; like
+&lt;/p&gt;
+&lt;p&gt;
+or &lt;strong&gt;start with bold &lt;em&gt;and&lt;/em&gt;&lt;/strong&gt;&lt;em&gt; end with italic&lt;/em&gt; as well
+&lt;/p&gt;
+</pre></td>
+				<td></td>
+			</tr><tr class="test">
+				<td>underlined text</td>
+				<td><pre>the following __text is underlined__ you see</pre></td>
+				<td><pre>&lt;p&gt;
+the following &lt;u&gt;text is underlined&lt;/u&gt; you see
+&lt;/p&gt;
+</pre></td>
+				<td></td>
+			</tr><tr class="test">
+				<td>monotype text</td>
+				<td><pre>the following {{{text is monotype}}} you see</pre></td>
+				<td><pre>&lt;p&gt;
+the following &lt;tt&gt;text is monotype&lt;/tt&gt; you see
+&lt;/p&gt;
+</pre></td>
+				<td></td>
+			</tr><tr class="test">
+				<td>strikethrough text</td>
+				<td><pre>and this ~~text is strikethrough~~ instead</pre></td>
+				<td><pre>&lt;p&gt;
+and this &lt;strike&gt;text is strikethrough&lt;/strike&gt; instead
+&lt;/p&gt;
+</pre></td>
+				<td></td>
+			</tr><tr class="test">
+				<td>superscript text</td>
+				<td><pre>superscript is good 1^st^ of all ^for^ numbers</pre></td>
+				<td><pre>&lt;p&gt;
+superscript is good 1&lt;sup&gt;st&lt;/sup&gt; of all &lt;sup&gt;for&lt;/sup&gt; numbers
+&lt;/p&gt;
+</pre></td>
+				<td></td>
+			</tr><tr class="test">
+				<td>subscript text</td>
+				<td><pre>subscript makes good,,annotations,, for algebra</pre></td>
+				<td><pre>&lt;p&gt;
+subscript makes good&lt;sub&gt;annotations&lt;/sub&gt; for algebra
+&lt;/p&gt;
+</pre></td>
+				<td></td>
+			</tr><tr class="test">
+				<td>ignore markup inside monotyped text</td>
+				<td><pre>some '''bold''' text then {{{begin {{{monospace and '''bold''' ^super^ ,,sub,, __underline__}}} should ^have^ __been__ ignored.</pre></td>
+				<td><pre>&lt;p&gt;
+some &lt;strong&gt;bold&lt;/strong&gt; text then &lt;tt&gt;begin {{{monospace and '''bold''' ^super^ ,,sub,, __underline__&lt;/tt&gt; should &lt;sup&gt;have&lt;/sup&gt; &lt;u&gt;been&lt;/u&gt; ignored.
+&lt;/p&gt;
+</pre></td>
+				<td></td>
+			</tr><tr class="test">
+				<td>continue font style across blocks</td>
+				<td><pre>first a '''bold and ''italic paragraph
+
+ our block will __continue some of this
+
+ # end some in a'' numbered__ item
+
+and finish''' with another paragraph</pre></td>
+				<td><pre>&lt;p&gt;
+first a &lt;strong&gt;bold and &lt;em&gt;italic paragraph
+&lt;/em&gt;&lt;/strong&gt;&lt;/p&gt;
+&lt;blockquote&gt;&lt;strong&gt;&lt;em&gt;
+our block will &lt;u&gt;continue some of this&lt;/u&gt;&lt;/em&gt;&lt;/strong&gt;
+&lt;/blockquote&gt;
+&lt;ol&gt;
+&lt;li&gt;&lt;strong&gt;&lt;em&gt;&lt;u&gt;end some in a&lt;/u&gt;&lt;/em&gt;&lt;u&gt; numbered&lt;/u&gt; item&lt;/strong&gt;&lt;/li&gt;
+&lt;/ol&gt;
+&lt;p&gt;
+&lt;strong&gt;and finish&lt;/strong&gt; with another paragraph
+&lt;/p&gt;
+</pre></td>
+				<td></td>
+			</tr><tr class="test">
+				<td>ignore styling inside headings</td>
+				<td><pre>first a '''bold and ''italic __paragraph
+
+==== Heading Level 4 ====
+
+and finish''' with__ another'' paragraph</pre></td>
+				<td><pre>&lt;p&gt;
+first a &lt;strong&gt;bold and &lt;em&gt;italic &lt;u&gt;paragraph
+&lt;/u&gt;&lt;/em&gt;&lt;/strong&gt;&lt;/p&gt;
+
+&lt;h4&gt;Heading Level 4 &lt;/h4&gt;
+
+&lt;p&gt;
+&lt;strong&gt;&lt;em&gt;&lt;u&gt;and finish&lt;/u&gt;&lt;/em&gt;&lt;/strong&gt;&lt;em&gt;&lt;u&gt; with&lt;/u&gt; another&lt;/em&gt; paragraph
+&lt;/p&gt;
+</pre></td>
+				<td></td>
+			</tr><tr class="test">
+				<td>end markup at end of text</td>
+				<td><pre>a __paragraph ~~with ^some ''font '''styling</pre></td>
+				<td><pre>&lt;p&gt;
+a &lt;u&gt;paragraph &lt;strike&gt;with &lt;sup&gt;some &lt;em&gt;font &lt;strong&gt;styling
+&lt;/strong&gt;&lt;/em&gt;&lt;/sup&gt;&lt;/strike&gt;&lt;/u&gt;&lt;/p&gt;
+</pre></td>
+				<td></td>
+			</tr><tr class="test">
+				<td>continue monotype across blocks</td>
+				<td><pre>paragraph which {{{begins monotype
+
+and paragraph which ends}}} it.</pre></td>
+				<td><pre>&lt;p&gt;
+paragraph which &lt;tt&gt;begins monotype
+&lt;/tt&gt;&lt;/p&gt;
+&lt;p&gt;
+&lt;tt&gt;and paragraph which ends&lt;/tt&gt; it.
+&lt;/p&gt;
+</pre></td>
+				<td></td>
+			</tr><tr class="test">
+				<td>continue monotype across blocks</td>
+				<td><pre>paragraph which '''begins bold and ''italic
+{{{
+preformatted text
+}}}
+and paragraph which ends''''' it.</pre></td>
+				<td><pre>&lt;p&gt;
+paragraph which &lt;strong&gt;begins bold and &lt;em&gt;italic
+&lt;/em&gt;&lt;/strong&gt;&lt;/p&gt;
+&lt;pre&gt;
+preformatted text
+&lt;/pre&gt;
+&lt;p&gt;
+&lt;strong&gt;&lt;em&gt;and paragraph which ends&lt;/em&gt;&lt;/strong&gt; it.
+&lt;/p&gt;
+</pre></td>
+				<td></td>
+			</tr>
+		</tbody>
+	</table>	
+	<h3>Automatic Links</h3>
+	
+<table class="tests">
+		<thead>
+			<tr>
+				<th>Test</th>
+				<th>Wicked Text Input</th>
+				<th>Expected Output</th>
+				<th>Actual Output</th>
+			</tr>
+		</thead>
+		<tbody>
+			<tr class="test">
+				<td>HTTP links</td>
+				<td><pre>recognise http://www.example.com/ as a link
+</pre></td>
+				<td><pre>&lt;p&gt;
+recognise &lt;A HREF="http://www.example.com/"&gt;http://www.example.com/&lt;/A&gt; as a link
+&lt;/p&gt;
+</pre></td>
+				<td></td>
+			</tr><tr class="test">
+				<td>HTTPS links</td>
+				<td><pre>recognise https://www.example.com/ as a link
+</pre></td>
+				<td><pre>&lt;p&gt;
+recognise &lt;A HREF="https://www.example.com/"&gt;https://www.example.com/&lt;/A&gt; as a link
+&lt;/p&gt;
+</pre></td>
+				<td></td>
+			</tr><tr class="test">
+				<td>FTP links</td>
+				<td><pre>recognise ftp://ftp.example.com/ as a link
+</pre></td>
+				<td><pre>&lt;p&gt;
+recognise &lt;A HREF="ftp://ftp.example.com/"&gt;ftp://ftp.example.com/&lt;/A&gt; as a link
+&lt;/p&gt;
+</pre></td>
+				<td></td>
+			</tr><tr class="test">
+				<td>email addresses</td>
+				<td><pre>recognise simon@example.com as a link
+</pre></td>
+				<td><pre>&lt;p&gt;
+recognise &lt;A HREF="mailto:simon@example.com"&gt;simon@example.com&lt;/A&gt; as a link
+&lt;/p&gt;
+</pre></td>
+				<td></td>
+			</tr><tr class="test">
+				<td>email addresses with mailto:</td>
+				<td><pre>recognise mailto:simon@example.com as a link
+</pre></td>
+				<td><pre>&lt;p&gt;
+recognise &lt;A HREF="mailto:simon@example.com"&gt;simon@example.com&lt;/A&gt; as a link
+&lt;/p&gt;
+</pre></td>
+				<td></td>
+			</tr><tr class="test">
+				<td>parameters on HTTP links</td>
+				<td><pre>handle http://www.example.com/some-script.php?param1=value&amp;param2=something links with parameters.
+</pre></td>
+				<td><pre>&lt;p&gt;
+handle &lt;A HREF="http://www.example.com/some-script.php?param1=value&amp;param2=something"&gt;http://www.example.com/some-script.php?param1=value&amp;amp;param2=something&lt;/A&gt; links with parameters.
+&lt;/p&gt;
+</pre></td>
+				<td></td>
+			</tr><tr class="test">
+				<td>url escapes in links</td>
+				<td><pre>recognised https://example.com/A%20URL%20With%20Spaces links with embeded spaces</pre></td>
+				<td><pre>&lt;p&gt;
+recognised &lt;A HREF="https://example.com/A%20URL%20With%20Spaces"&gt;https://example.com/A URL With Spaces&lt;/A&gt; links with embeded spaces
+&lt;/p&gt;
+</pre></td>
+				<td></td>
+			</tr>
+		</tbody>
+	</table>
+	
+	<p>TODO: make the link HTML lower case.</p>
+
+	<h3>Named Links</h3>
+		<p>This also tests the namedLink function.</p>
+	
+<table class="tests">
+		<thead>
+			<tr>
+				<th>Test</th>
+				<th>Wicked Text Input</th>
+				<th>Expected Output</th>
+				<th>Actual Output</th>
+			</tr>
+		</thead>
+		<tbody>
+			<tr class="test">
+				<td>basic named link</td>
+				<td><pre>basic named link [http://www.example.com] here</pre></td>
+				<td><pre>&lt;p&gt;
+basic named link &lt;A HREF="http://www.example.com"&gt;http://www.example.com&lt;/A&gt; here
+&lt;/p&gt;
+</pre></td>
+				<td></td>
+			</tr><tr class="test">
+				<td>a named link with it's name</td>
+				<td><pre>a named link [http://www.example.com Example] with a name</pre></td>
+				<td><pre>&lt;p&gt;
+a named link &lt;A HREF="http://www.example.com"&gt;Example&lt;/A&gt; with a name
+&lt;/p&gt;
+</pre></td>
+				<td></td>
+			</tr><tr class="test">
+				<td>a relative named link</td>
+				<td><pre>a relative named link [/index.html Example] with a name</pre></td>
+				<td><pre>&lt;p&gt;
+a relative named link &lt;A HREF="/index.html"&gt;Example&lt;/A&gt; with a name
+&lt;/p&gt;
+</pre></td>
+				<td></td>
+			</tr><tr class="test">
+				<td>named email address</td>
+				<td><pre>two named email addresses [mailto:simon@example.com Simon with mailto:] and    [simon@example.com Simon without]
+</pre></td>
+				<td><pre>&lt;p&gt;
+two named email addresses &lt;A HREF="mailto:simon@example.com"&gt;Simon with mailto:&lt;/A&gt; and    &lt;A HREF="mailto:simon@example.com"&gt;Simon without&lt;/A&gt;
+&lt;/p&gt;
+</pre></td>
+				<td></td>
+			</tr><tr class="test">
+				<td>fail if space after bracket</td>
+				<td><pre>not a [ 1] named link</pre></td>
+				<td><pre>&lt;p&gt;
+not a [ 1] named link
+&lt;/p&gt;
+</pre></td>
+				<td></td>
+			</tr><tr class="test">
+				<td>fail if not a valid url</td>
+				<td><pre>not a [^] named link and [(also) for example] not a named link</pre></td>
+				<td><pre>&lt;p&gt;
+not a [^] named link and [(also) for example] not a named link
+&lt;/p&gt;
+</pre></td>
+				<td></td>
+			</tr><tr class="test">
+				<td>fail if no closing ]</td>
+				<td><pre>not a named link [index.html Wiki Text Home</pre></td>
+				<td><pre>&lt;p&gt;
+not a named link [index.html Wiki Text Home
+&lt;/p&gt;
+</pre></td>
+				<td></td>
+			</tr><tr class="test">
+				<td>fail if wrapped</td>
+				<td><pre>not a named link [index.html 
+Wiki Text Home]</pre></td>
+				<td><pre>&lt;p&gt;
+not a named link [index.html 
+Wiki Text Home]
+&lt;/p&gt;
+</pre></td>
+				<td></td>
+			</tr>
+		</tbody>
+	</table>
+	
+	<h3>Escape Syntax</h3>
+<table class="tests">
+		<thead>
+			<tr>
+				<th>Test</th>
+				<th>Wicked Text Input</th>
+				<th>Expected Output</th>
+				<th>Actual Output</th>
+			</tr>
+		</thead>
+		<tbody>
+			<tr class="test">
+				<td>ignore escape character as punctuation</td>
+				<td><pre>The escape character is an exclamation mark!</pre></td>
+				<td><pre>&lt;p&gt;
+The escape character is an exclamation mark!
+&lt;/p&gt;
+</pre></td>
+				<td></td>
+			</tr><tr class="test">
+				<td>ignore escape characters</td>
+				<td><pre>!!!!!!</pre></td>
+				<td><pre>&lt;p&gt;
+!!!!!!
+&lt;/p&gt;
+</pre></td>
+				<td></td>
+			</tr><tr class="test">
+				<td>escape bold</td>
+				<td><pre>a paragraph with '''bold text''' and !'''ignored markup</pre></td>
+				<td><pre>&lt;p&gt;
+a paragraph with &lt;strong&gt;bold text&lt;/strong&gt; and '''ignored markup
+&lt;/p&gt;
+</pre></td>
+				<td></td>
+			</tr><tr class="test">
+				<td>escape italic</td>
+				<td><pre>a paragraph with ''italic text'' and !''ignored markup</pre></td>
+				<td><pre>&lt;p&gt;
+a paragraph with &lt;em&gt;italic text&lt;/em&gt; and ''ignored markup
+&lt;/p&gt;
+</pre></td>
+				<td></td>
+			</tr><tr class="test">
+				<td>escape underline</td>
+				<td><pre>a paragraph with __underline text__ and !__ignored markup</pre></td>
+				<td><pre>&lt;p&gt;
+a paragraph with &lt;u&gt;underline text&lt;/u&gt; and __ignored markup
+&lt;/p&gt;
+</pre></td>
+				<td></td>
+			</tr><tr class="test">
+				<td>escape strikethrough</td>
+				<td><pre>a paragraph with ~~strikethrough text~~ and !~~~ignored markup</pre></td>
+				<td><pre>&lt;p&gt;
+a paragraph with &lt;strike&gt;strikethrough text&lt;/strike&gt; and ~~~ignored markup
+&lt;/p&gt;
+</pre></td>
+				<td></td>
+			</tr><tr class="test">
+				<td>escape superscript</td>
+				<td><pre>a paragraph with ^superscript text^ and !^ignored markup</pre></td>
+				<td><pre>&lt;p&gt;
+a paragraph with &lt;sup&gt;superscript text&lt;/sup&gt; and ^ignored markup
+&lt;/p&gt;
+</pre></td>
+				<td></td>
+			</tr><tr class="test">
+				<td>escape subscript</td>
+				<td><pre>a paragraph with ,,subscript text,, and !,,ignored markup</pre></td>
+				<td><pre>&lt;p&gt;
+a paragraph with &lt;sub&gt;subscript text&lt;/sub&gt; and ,,ignored markup
+&lt;/p&gt;
+</pre></td>
+				<td></td>
+			</tr><tr class="test">
+				<td>escape monotype</td>
+				<td><pre>a paragraph with {{{monotype !text}}} and !{{{ignored markup</pre></td>
+				<td><pre>&lt;p&gt;
+a paragraph with &lt;tt&gt;monotype !text&lt;/tt&gt; and {{{ignored markup
+&lt;/p&gt;
+</pre></td>
+				<td></td>
+			</tr>
+			<tr class="test">
+				<td>ignore all but end monotype inside monotype</td>
+				<td><pre>some {{{monotype text '''ignore !'''bold and !}}}end}}} inside</pre></td>
+				<td><pre>&lt;p&gt;
+some &lt;tt&gt;monotype text '''ignore !'''bold and !}}}end&lt;/tt&gt; inside
+&lt;/p&gt;
+</pre></td>
+				<td></td>
+			</tr><tr class="test">
+				<td>escape linebreaks</td>
+				<td><pre>a line that is broken[[BR]] here but not ![[BR]] here</pre></td>
+				<td><pre>&lt;p&gt;
+a line that is broken&lt;br/&gt; here but not [[BR]] here
+&lt;/p&gt;
+</pre></td>
+				<td></td>
+			</tr><tr class="test">
+				<td>escape named links</td>
+				<td><pre>a named link [http://www.example.com/ Example] but this is not ![http://www.example.com/ Example]</pre></td>
+				<td><pre>&lt;p&gt;
+a named link &lt;A HREF="http://www.example.com/"&gt;Example&lt;/A&gt; but this is not [&lt;A HREF="http://www.example.com/"&gt;http://www.example.com/&lt;/A&gt; Example]
+&lt;/p&gt;
+</pre></td>
+				<td></td>
+			</tr><tr class="test">
+				<td>escaped escapes</td>
+				<td><pre>It's Bold!!'''bold'''</pre></td>
+				<td><pre>&lt;p&gt;
+It's Bold!&lt;strong&gt;bold&lt;/strong&gt;
+&lt;/p&gt;
+</pre></td>
+				<td></td>
+			</tr>
+		</tbody>
+	</table>
+	
+	<h3>safeText Function</h3>
+
+	<p>The safeText function should ensure no dubious characters appear in the text.</p>
+	
+	<p>&nbsp;</p>
+
+</body>
+</html>

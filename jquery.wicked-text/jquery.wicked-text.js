@@ -23,11 +23,11 @@
  * @author Simon J. Williams
  * @version: 0.3
  */
-(function( jQuery )
+(function(jQuery)
 {
 	/**
 	 * jQuery definition to anchor JsDoc comments.
-	 *  
+	 * 
 	 * @see http://jquery.com/
 	 * @name jQuery
 	 * @class jQuery Library
@@ -38,11 +38,12 @@
 	 * 
 	 * @namespace Kajabity Wicked Text
 	 * @function
-	 * @param {string} text the Wicked text to be converted to HTML.
+	 * @param {string}
+	 *            text the Wicked text to be converted to HTML.
 	 * @return {string} HTML formatted text.
 	 * @memberOf jQuery
 	 */
-	jQuery.wickedText = function( text )
+	jQuery.wickedText = function(text)
 	{
 		// The source text with nulls/undefined taken care of.
 		var source = (text || '').toString();
@@ -89,11 +90,13 @@
 		var tn_underline = "__";
 		var tn_strikethrough = "~~";
 		var tn_break = "[[BR]]";
-		var monospace = false;
 
 		// Keep track of inline format nesting.
 		var tagStack = [];
 		var poppedStack = [];
+
+		// Mono spaced (TT) text breaks that nesting.
+		var monospace = false;
 
 		// Inline formatting start tags.
 		var beginings =
@@ -165,8 +168,13 @@
 			}
 			if( bq )
 			{
-				html += "</blockquote>\n";
+				html += "\n</blockquote>\n";
 				bq = false;
+			}
+			if( mono )
+			{
+				html += "</pre>\n";
+				mono = false;
 			}
 		};
 
@@ -192,11 +200,12 @@
 		 * toggles the formatting on or off depending if it is currently in the
 		 * tagStack.
 		 * 
-		 * @param {string} label the name of the format to toggle.
+		 * @param {string}
+		 *            label the name of the format to toggle.
 		 * @return {string} any HTML start or end tags to toggle the formatting
 		 *         with proper nesting.
 		 */
-		var toggleFormatting = function( label )
+		var toggleFormatting = function(label)
 		{
 			var tags = '';
 			if( jQuery.inArray( label, tagStack ) > -1 )
@@ -211,7 +220,8 @@
 						break;
 					}
 					poppedStack.push( popped );
-				} while( popped !== label );
+				}
+				while( popped !== label );
 
 				tags += restartFormatting();
 			}
@@ -228,10 +238,11 @@
 		 * Apply inline formatting to text in a line - and escape any HTML
 		 * mark-up tags.
 		 * 
-		 * @param {string} text the plain text to be formatted and escaped.
+		 * @param {string}
+		 *            text the plain text to be formatted and escaped.
 		 * @return {string} HTML formatted text.
 		 */
-		var formatText = function( text )
+		var formatText = function(text)
 		{
 			var sourceToken = (text || '').toString();
 			var formattedText = '';
@@ -240,6 +251,8 @@
 			var tokenArray;
 			var linkText;
 			var nl_tokenArray;
+			var ignore;
+			var ignored;
 
 			// Iterate through any mark-up tokens in the line.
 			while( (tokenArray = regexToken.exec( sourceToken )) !== null )
@@ -265,75 +278,91 @@
 						formattedText += jQuery.wickedText.safeText( token );
 					}
 				}
-				else if( tn_monospace === token )
+				else
 				{
-					monospace = true;
-					formattedText += toggleFormatting( "monospace" );
-				}
-				else if( jQuery.wickedText.re_link.test( token ) )
-				{
-					formattedText += jQuery.wickedText.namedLink( token );
-				}
-				else if( jQuery.wickedText.re_mail.test( token ) )
-				{
-					formattedText += jQuery.wickedText.namedLink( token );
-				}
-				else if( tn_bold === token )
-				{
-					formattedText += toggleFormatting( "bold" );
-				}
-				else if( tn_italic === token )
-				{
-					formattedText += toggleFormatting( "italic" );
-				}
-				else if( tn_bolditalic === token )
-				{
-					// Avoid empty tag if nesting is wrong way around.
-					if( jQuery.inArray( "bold", tagStack ) > jQuery.inArray(
-							"italic", tagStack ) )
+					ignore = false;
+					ignored = 0;
+					while( token.length > ignored && token[ignored] === "!" )
+					{
+						ignored++;
+						ignore = !ignore;
+						if( !ignore )
+						{
+							formattedText += "!";
+						}
+					}
+
+					token = token.substring( ignored );
+
+					if( ignore )
+					{
+						formattedText += jQuery.wickedText.safeText( token );
+					}
+					else if( tn_monospace === token )
+					{
+						monospace = true;
+						formattedText += toggleFormatting( "monospace" );
+					}
+					else if( jQuery.wickedText.re_link.test( token ) )
+					{
+						formattedText += jQuery.wickedText.namedLink( token );
+					}
+					else if( jQuery.wickedText.re_mail.test( token ) )
+					{
+						formattedText += jQuery.wickedText.namedLink( token );
+					}
+					else if( tn_bold === token )
 					{
 						formattedText += toggleFormatting( "bold" );
+					}
+					else if( tn_italic === token )
+					{
 						formattedText += toggleFormatting( "italic" );
+					}
+					else if( tn_bolditalic === token )
+					{
+						// Avoid empty tag if nesting is wrong way around.
+						if( jQuery.inArray( "bold", tagStack ) > jQuery
+								.inArray( "italic", tagStack ) )
+						{
+							formattedText += toggleFormatting( "bold" );
+							formattedText += toggleFormatting( "italic" );
+						}
+						else
+						{
+							formattedText += toggleFormatting( "italic" );
+							formattedText += toggleFormatting( "bold" );
+						}
+					}
+					else if( tn_superscript === token )
+					{
+						formattedText += toggleFormatting( "superscript" );
+					}
+					else if( tn_subscript === token )
+					{
+						formattedText += toggleFormatting( "subscript" );
+					}
+					else if( tn_underline === token )
+					{
+						formattedText += toggleFormatting( "underline" );
+					}
+					else if( tn_strikethrough === token )
+					{
+						formattedText += toggleFormatting( "strikethrough" );
+					}
+					else if( tn_break === token )
+					{
+						formattedText += "<br/>";
+					}
+					else if( (nl_tokenArray = re_named_link.exec( token )) !== null )
+					{
+						formattedText += jQuery.wickedText.namedLink(
+								nl_tokenArray[1], nl_tokenArray[10] );
 					}
 					else
 					{
-						formattedText += toggleFormatting( "italic" );
-						formattedText += toggleFormatting( "bold" );
+						formattedText += jQuery.wickedText.safeText( token );
 					}
-				}
-				else if( tn_superscript === token )
-				{
-					formattedText += toggleFormatting( "superscript" );
-				}
-				else if( tn_subscript === token )
-				{
-					formattedText += toggleFormatting( "subscript" );
-				}
-				else if( tn_underline === token )
-				{
-					formattedText += toggleFormatting( "underline" );
-				}
-				else if( tn_strikethrough === token )
-				{
-					formattedText += toggleFormatting( "strikethrough" );
-				}
-				else if( tn_break === token )
-				{
-					formattedText += "<br/>";
-				}
-				else if( (nl_tokenArray = re_named_link.exec( token )) !== null )
-				{
-					formattedText += jQuery.wickedText.namedLink(
-							nl_tokenArray[1], nl_tokenArray[10] );
-				}
-				else if( token[0] === "!" )
-				{
-					formattedText += jQuery.wickedText.safeText( token
-							.substring( 1 ) );
-				}
-				else
-				{
-					formattedText += jQuery.wickedText.safeText( token );
 				}
 
 				offset = regexToken.lastIndex;
@@ -403,9 +432,8 @@
 			{
 				endBlock();
 				var headingLevel = matches[1].length;
-				html += "\n<h" + headingLevel + ">" + restartFormatting()
-						+ formatText( matches[2] ) + endFormatting() + "</h"
-						+ headingLevel + ">\n\n";
+				html += "\n<h" + headingLevel + ">" + formatText( matches[2] )
+						+ "</h" + headingLevel + ">\n\n";
 			}
 			else if( (matches = line.match( re_bullet )) !== null )
 			{
@@ -454,7 +482,7 @@
 				if( !(bq || olist || ulist) )
 				{
 					endBlock();
-					html += "<blockquote>\n";
+					html += "<blockquote>";
 					html += restartFormatting();
 					bq = true;
 				}
@@ -483,18 +511,22 @@
 	/**
 	 * Escape HTML special characters.
 	 * 
-	 * @param {string} text which may contain HTML mark-up characters.
+	 * @param {string}
+	 *            text which may contain HTML mark-up characters.
 	 * @return {string} text with HTML mark-up characters escaped.
 	 * @memberOf jQuery.wickedText
 	 */
-	jQuery.wickedText.safeText = function( text )
+	jQuery.wickedText.safeText = function(text)
 	{
+		// TODO - escape control and non ascii characters.
+
 		return (text || '').replace( /&/g, "&amp;" ).replace( /</g, "&lt;" )
 				.replace( />/g, "&gt;" );
 	};
 
 	/**
 	 * A regular expression which detects HTTP(S) and FTP URLs.
+	 * 
 	 * @type RegExp
 	 */
 	jQuery.wickedText.re_link = /^((ftp|https?):\/\/)[\-\w@:%_\+.~#?,&\/\/=]+$/;
@@ -502,6 +534,7 @@
 	/**
 	 * A regular expression to match an email address with or without "mailto:"
 	 * in front.
+	 * 
 	 * @type RegExp
 	 */
 	jQuery.wickedText.re_mail = /^(mailto:)?([_.\w\-]+@([\w][\w\-]+\.)+[a-zA-Z]{2,3})$/;
@@ -518,18 +551,23 @@
 	 * The name is then escaped using safeText.
 	 * </p>
 	 * 
-	 * @param {string} url the URL which may be a full HTTP(S), FTP or Email URL
-	 *            or a relative URL.
-	 * @param {string} name
+	 * @param {string}
+	 *            url the URL which may be a full HTTP(S), FTP or Email URL or a
+	 *            relative URL.
+	 * @param {string}
+	 *            name
 	 * @return {string} text containing a HTML link tag.
 	 * @memberOf jQuery.wickedText
 	 */
-	jQuery.wickedText.namedLink = function( url, name )
+	jQuery.wickedText.namedLink = function(url, name)
 	{
 		var linkUrl;
 		var linkText;
 
-		if( !url ) { return jQuery.wickedText.safeText( name ); }
+		if( !url )
+		{
+			return jQuery.wickedText.safeText( name );
+		}
 
 		if( jQuery.wickedText.re_mail.test( url ) )
 		{
@@ -552,7 +590,7 @@
 
 	/**
 	 * jQuery 'fn' definition to anchor JsDoc comments.
-	 *  
+	 * 
 	 * 
 	 * @see http://jquery.com/
 	 * @name fn
@@ -565,11 +603,12 @@
 	 * converted to HTML.
 	 * 
 	 * @class Wiki Text Wrapper
-	 * @param {string} text text with Wiki mark-up.
+	 * @param {string}
+	 *            text text with Wiki mark-up.
 	 * @return {jQuery} chainable jQuery class
 	 * @memberOf jQuery.fn
 	 */
-	jQuery.fn.wickedText = function( text )
+	jQuery.fn.wickedText = function(text)
 	{
 		return this.html( jQuery.wickedText( text ) );
 	};
