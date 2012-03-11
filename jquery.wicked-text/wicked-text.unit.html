@@ -1261,7 +1261,26 @@ It's Bold!&lt;strong&gt;bold&lt;/strong&gt;
 
 	<p>The safeText function should ensure no dubious characters appear in the text.</p>
 	
-	<p>&nbsp;</p>
-
+<table class="tests">
+		<thead>
+			<tr>
+				<th>Test</th>
+				<th>Wicked Text Input</th>
+				<th>Expected Output</th>
+				<th>Actual Output</th>
+			</tr>
+		</thead>
+		<tbody>
+			<tr class="test">
+				<td>escape special characters</td>
+				<td><pre>a sentence with some &lt;html/&gt; &amp; stuff.</pre></td>
+				<td><pre>&lt;p&gt;
+a sentence with some &amp;lt;html/&amp;gt; &amp;amp; stuff.
+&lt;/p&gt;
+</pre></td>
+				<td></td>
+			</tr>
+		</tbody>
+	</table>
 </body>
 </html>

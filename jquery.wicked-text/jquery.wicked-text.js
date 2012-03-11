@@ -518,8 +518,6 @@
 	 */
 	jQuery.wickedText.safeText = function(text)
 	{
-		// TODO - escape control and non ascii characters.
-
 		return (text || '').replace( /&/g, "&amp;" ).replace( /</g, "&lt;" )
 				.replace( />/g, "&gt;" );
 	};
