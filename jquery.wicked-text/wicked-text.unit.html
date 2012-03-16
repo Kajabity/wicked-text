@@ -52,7 +52,7 @@ td {
 }
 </style>
 <script type="text/javascript"
-	src="http://ajax.googleapis.com/ajax/libs/jquery/1.5.1/jquery.min.js"></script>
+	src="http://ajax.googleapis.com/ajax/libs/jquery/1.7.1/jquery.min.js"></script>
 <script type="text/javascript" src="jquery.wicked-text.js"></script>
 
 <script type="text/javascript">
@@ -70,9 +70,15 @@ td {
 					countTests++;
 
 					//	get the source
+					var aa = $( "td:nth-child(2)>pre", this );
+					var bb = aa.text();
+					var cc = $.trim( bb );
 					var source = $( "td:nth-child(2)>pre", this ).text();
 
 					//	get the expected output
+					var dd = $( "td:nth-child(3)>pre", this );
+					var ee = dd.text();
+					var ff = $.trim( ee );
 					var expected = $.trim( $( "td:nth-child(3)>pre", this )
 							.text() );
 
@@ -96,9 +102,7 @@ td {
 
 					//	Append actual result to final cell and set result class
 					$( "td", this ).addClass( resultClass );
-					$( "td:nth-child(4)", this ).append(
-							$( "<pre></pre>" ).html(
-									$.wickedText.safeText( result ) ) );
+					$( "td:nth-child(4)", this ).append( $( "<pre></pre>" ).html( $.wickedText.safeText( result ) ) );
 				} );
 
 		// Finally, set the values in the summary table.
@@ -990,7 +994,7 @@ preformatted text
 				<td><pre>recognise http://www.example.com/ as a link
 </pre></td>
 				<td><pre>&lt;p&gt;
-recognise &lt;A HREF="http://www.example.com/"&gt;http://www.example.com/&lt;/A&gt; as a link
+recognise &lt;a href="http://www.example.com/"&gt;http://www.example.com/&lt;/a&gt; as a link
 &lt;/p&gt;
 </pre></td>
 				<td></td>
@@ -999,7 +1003,7 @@ recognise &lt;A HREF="http://www.example.com/"&gt;http://www.example.com/&lt;/A&
 				<td><pre>recognise https://www.example.com/ as a link
 </pre></td>
 				<td><pre>&lt;p&gt;
-recognise &lt;A HREF="https://www.example.com/"&gt;https://www.example.com/&lt;/A&gt; as a link
+recognise &lt;a href="https://www.example.com/"&gt;https://www.example.com/&lt;/a&gt; as a link
 &lt;/p&gt;
 </pre></td>
 				<td></td>
@@ -1008,7 +1012,7 @@ recognise &lt;A HREF="https://www.example.com/"&gt;https://www.example.com/&lt;/
 				<td><pre>recognise ftp://ftp.example.com/ as a link
 </pre></td>
 				<td><pre>&lt;p&gt;
-recognise &lt;A HREF="ftp://ftp.example.com/"&gt;ftp://ftp.example.com/&lt;/A&gt; as a link
+recognise &lt;a href="ftp://ftp.example.com/"&gt;ftp://ftp.example.com/&lt;/a&gt; as a link
 &lt;/p&gt;
 </pre></td>
 				<td></td>
@@ -1017,7 +1021,7 @@ recognise &lt;A HREF="ftp://ftp.example.com/"&gt;ftp://ftp.example.com/&lt;/A&gt
 				<td><pre>recognise simon@example.com as a link
 </pre></td>
 				<td><pre>&lt;p&gt;
-recognise &lt;A HREF="mailto:simon@example.com"&gt;simon@example.com&lt;/A&gt; as a link
+recognise &lt;a href="mailto:simon@example.com"&gt;simon@example.com&lt;/a&gt; as a link
 &lt;/p&gt;
 </pre></td>
 				<td></td>
@@ -1026,7 +1030,7 @@ recognise &lt;A HREF="mailto:simon@example.com"&gt;simon@example.com&lt;/A&gt; a
 				<td><pre>recognise mailto:simon@example.com as a link
 </pre></td>
 				<td><pre>&lt;p&gt;
-recognise &lt;A HREF="mailto:simon@example.com"&gt;simon@example.com&lt;/A&gt; as a link
+recognise &lt;a href="mailto:simon@example.com"&gt;simon@example.com&lt;/a&gt; as a link
 &lt;/p&gt;
 </pre></td>
 				<td></td>
@@ -1035,7 +1039,7 @@ recognise &lt;A HREF="mailto:simon@example.com"&gt;simon@example.com&lt;/A&gt; a
 				<td><pre>handle http://www.example.com/some-script.php?param1=value&amp;param2=something links with parameters.
 </pre></td>
 				<td><pre>&lt;p&gt;
-handle &lt;A HREF="http://www.example.com/some-script.php?param1=value&amp;param2=something"&gt;http://www.example.com/some-script.php?param1=value&amp;amp;param2=something&lt;/A&gt; links with parameters.
+handle &lt;a href="http://www.example.com/some-script.php?param1=value&amp;param2=something"&gt;http://www.example.com/some-script.php?param1=value&amp;amp;param2=something&lt;/a&gt; links with parameters.
 &lt;/p&gt;
 </pre></td>
 				<td></td>
@@ -1043,7 +1047,7 @@ handle &lt;A HREF="http://www.example.com/some-script.php?param1=value&amp;param
 				<td>url escapes in links</td>
 				<td><pre>recognised https://example.com/A%20URL%20With%20Spaces links with embeded spaces</pre></td>
 				<td><pre>&lt;p&gt;
-recognised &lt;A HREF="https://example.com/A%20URL%20With%20Spaces"&gt;https://example.com/A URL With Spaces&lt;/A&gt; links with embeded spaces
+recognised &lt;a href="https://example.com/A%20URL%20With%20Spaces"&gt;https://example.com/A URL With Spaces&lt;/a&gt; links with embeded spaces
 &lt;/p&gt;
 </pre></td>
 				<td></td>
@@ -1070,7 +1074,7 @@ recognised &lt;A HREF="https://example.com/A%20URL%20With%20Spaces"&gt;https://e
 				<td>basic named link</td>
 				<td><pre>basic named link [http://www.example.com] here</pre></td>
 				<td><pre>&lt;p&gt;
-basic named link &lt;A HREF="http://www.example.com"&gt;http://www.example.com&lt;/A&gt; here
+basic named link &lt;a href="http://www.example.com"&gt;http://www.example.com&lt;/a&gt; here
 &lt;/p&gt;
 </pre></td>
 				<td></td>
@@ -1078,7 +1082,7 @@ basic named link &lt;A HREF="http://www.example.com"&gt;http://www.example.com&l
 				<td>a named link with it's name</td>
 				<td><pre>a named link [http://www.example.com Example] with a name</pre></td>
 				<td><pre>&lt;p&gt;
-a named link &lt;A HREF="http://www.example.com"&gt;Example&lt;/A&gt; with a name
+a named link &lt;a href="http://www.example.com"&gt;Example&lt;/a&gt; with a name
 &lt;/p&gt;
 </pre></td>
 				<td></td>
@@ -1086,7 +1090,7 @@ a named link &lt;A HREF="http://www.example.com"&gt;Example&lt;/A&gt; with a nam
 				<td>a relative named link</td>
 				<td><pre>a relative named link [/index.html Example] with a name</pre></td>
 				<td><pre>&lt;p&gt;
-a relative named link &lt;A HREF="/index.html"&gt;Example&lt;/A&gt; with a name
+a relative named link &lt;a href="/index.html"&gt;Example&lt;/a&gt; with a name
 &lt;/p&gt;
 </pre></td>
 				<td></td>
@@ -1095,7 +1099,7 @@ a relative named link &lt;A HREF="/index.html"&gt;Example&lt;/A&gt; with a name
 				<td><pre>two named email addresses [mailto:simon@example.com Simon with mailto:] and    [simon@example.com Simon without]
 </pre></td>
 				<td><pre>&lt;p&gt;
-two named email addresses &lt;A HREF="mailto:simon@example.com"&gt;Simon with mailto:&lt;/A&gt; and    &lt;A HREF="mailto:simon@example.com"&gt;Simon without&lt;/A&gt;
+two named email addresses &lt;a href="mailto:simon@example.com"&gt;Simon with mailto:&lt;/a&gt; and    &lt;a href="mailto:simon@example.com"&gt;Simon without&lt;/a&gt;
 &lt;/p&gt;
 </pre></td>
 				<td></td>
@@ -1241,7 +1245,7 @@ a line that is broken&lt;br/&gt; here but not [[BR]] here
 				<td>escape named links</td>
 				<td><pre>a named link [http://www.example.com/ Example] but this is not ![http://www.example.com/ Example]</pre></td>
 				<td><pre>&lt;p&gt;
-a named link &lt;A HREF="http://www.example.com/"&gt;Example&lt;/A&gt; but this is not [&lt;A HREF="http://www.example.com/"&gt;http://www.example.com/&lt;/A&gt; Example]
+a named link &lt;a href="http://www.example.com/"&gt;Example&lt;/a&gt; but this is not [&lt;a href="http://www.example.com/"&gt;http://www.example.com/&lt;/a&gt; Example]
 &lt;/p&gt;
 </pre></td>
 				<td></td>

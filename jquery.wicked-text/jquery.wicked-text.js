@@ -537,6 +537,7 @@
 	 */
 	jQuery.wickedText.re_mail = /^(mailto:)?([_.\w\-]+@([\w][\w\-]+\.)+[a-zA-Z]{2,3})$/;
 
+	
 	/**
 	 * Create a HTML link from a URL and Display Text - default the display to
 	 * the URL (tidied up).
@@ -583,7 +584,7 @@
 		}
 
 		linkText = jQuery.wickedText.safeText( name );
-		return linkText.link( linkUrl );
+		return "<a href=\"" + linkUrl + "\">" + linkText + "</a>";
 	};
 
 	/**

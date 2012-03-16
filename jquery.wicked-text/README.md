@@ -4,12 +4,12 @@ The Wicked Text plugin for jQuery enables plain text to be converted to HTML usi
 
 The plugin provides the following features: -
 
-*    **$.wikiText( plaintext )** - a jQuery utility function to convert Wiki formatted 'plaintext' to HTML.
-*    **$.fn.wikiText( plaintext )** - a jQuery wrapper function to add Wiki formatted text to a DOM object.
+*    **$.wickedText( plaintext )** - a jQuery utility function to convert unformatted 'plaintext' to HTML.
+*    **$.fn.wickedText( plaintext )** - a jQuery wrapper function to add unformatted text to a DOM object.
 
 In addition, one or two constants and functions have been made accessible from the plugin.  
 
-You can try out the plugin on the Wiki Test page and see the results in real time (it's quite fast, too).
+You can try out the plugin on the Test page and see the results in real time (it's quite fast, too).
 
 Wicked Text uses a very simple textual mark-up syntax used for generating web pages. It is designed to be easy for non-technical 
 users to write and edit and still produce rich, structured HTML content.  The Wicked Text format is converted to simple, clean HTML - 
