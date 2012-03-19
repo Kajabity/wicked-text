@@ -274,7 +274,7 @@ A paragraph which you want to break&lt;br/&gt;here onto the next line and then&l
 				<td>
 				<pre>= Heading 1 =</pre>
 				</td>
-				<td><pre>&lt;h1&gt;Heading 1 &lt;/h1&gt;</pre></td>
+				<td><pre>&lt;h1&gt;Heading 1&lt;/h1&gt;</pre></td>
 				<td></td>
 			</tr>
 			<tr class="test">
@@ -282,7 +282,7 @@ A paragraph which you want to break&lt;br/&gt;here onto the next line and then&l
 				<td>
 				<pre>== Heading 2 ==</pre>
 				</td>
-				<td><pre>&lt;h2&gt;Heading 2 &lt;/h2&gt;</pre></td>
+				<td><pre>&lt;h2&gt;Heading 2&lt;/h2&gt;</pre></td>
 				<td></td>
 			</tr>
 			<tr class="test">
@@ -290,7 +290,7 @@ A paragraph which you want to break&lt;br/&gt;here onto the next line and then&l
 				<td>
 				<pre>===  Heading 3 ===</pre>
 				</td>
-				<td><pre>&lt;h3&gt;Heading 3 &lt;/h3&gt;</pre></td>
+				<td><pre>&lt;h3&gt;Heading 3&lt;/h3&gt;</pre></td>
 				<td></td>
 			</tr>
 			<tr class="test">
@@ -298,7 +298,7 @@ A paragraph which you want to break&lt;br/&gt;here onto the next line and then&l
 				<td>
 				<pre>==== Heading 4 ====</pre>
 				</td>
-				<td><pre>&lt;h4&gt;Heading 4 &lt;/h4&gt;</pre></td>
+				<td><pre>&lt;h4&gt;Heading 4&lt;/h4&gt;</pre></td>
 				<td></td>
 			</tr>
 			<tr class="test">
@@ -306,7 +306,7 @@ A paragraph which you want to break&lt;br/&gt;here onto the next line and then&l
 				<td>
 				<pre>===== Heading 5 =====</pre>
 				</td>
-				<td><pre>&lt;h5&gt;Heading 5 &lt;/h5&gt;</pre></td>
+				<td><pre>&lt;h5&gt;Heading 5&lt;/h5&gt;</pre></td>
 				<td></td>
 			</tr>
 			<tr class="test">
@@ -314,7 +314,7 @@ A paragraph which you want to break&lt;br/&gt;here onto the next line and then&l
 				<td>
 				<pre>====== Heading 6 ======</pre>
 				</td>
-				<td><pre>&lt;h6&gt;Heading 6 &lt;/h6&gt;</pre></td>
+				<td><pre>&lt;h6&gt;Heading 6&lt;/h6&gt;</pre></td>
 				<td></td>
 			</tr>
 			<tr class="test">
@@ -353,11 +353,57 @@ A paragraph which you want to break&lt;br/&gt;here onto the next line and then&l
 				</td>
 				<td></td>
 			</tr>
-			</table>
-	
-	<p>TODO: Check space after heading and none after final ===.&nbsp; Check 
-	matching number of ===</p>
+			<tr class="test">
+				<td>require space before last group of equals</td>
+				<td><pre>== Heading Level 2==</pre></td>
+				<td><pre>&lt;p&gt;
+== Heading Level 2==
+&lt;/p&gt;
+</pre></td>
+				<td></td>
+			</tr><tr class="test">
+				<td>must be no space after last group of equals</td>
+				<td><pre>== Heading Level 2 == </pre></td>
+				<td><pre>&lt;p&gt;
+== Heading Level 2 == 
+&lt;/p&gt;
+</pre></td>
+				<td></td>
+			</tr><tr class="test">
+				<td>ignore equals inside heading</td>
+				<td><pre>== Heading == Level 2 ==</pre></td>
+				<td><pre>
+&lt;h2&gt;Heading == Level 2&lt;/h2&gt;
+
+</pre></td>
+				<td></td>
+			</tr><tr class="test">
+				<td>Ignore HTML characters in heading</td>
+				<td><pre>== Heading &lt;h1&gt;Ignored&lt;/h1&gt; Level 2 ==</pre></td>
+				<td><pre>
+&lt;h2&gt;Heading &amp;lt;h1&amp;gt;Ignored&amp;lt;/h1&amp;gt; Level 2&lt;/h2&gt;
+
+</pre></td>
+				<td></td>
+			</tr><tr class="test">
+				<td>number of equals must match</td>
+				<td><pre>== the following are not headings ==
+=== too few equals ==
+=== too many equals ====</pre></td>
+				<td><pre>
+&lt;h2&gt;the following are not headings&lt;/h2&gt;
+
+&lt;p&gt;
+=== too few equals ==
+=== too many equals ====
+&lt;/p&gt;
+</pre></td>
+				<td></td>
+			</tr>
+	</table>	
+
 	<h3>Block Quotes</h3>
+
 	<table class="tests">
 			<tr>
 				<th>Test</th>
@@ -928,7 +974,7 @@ and finish''' with__ another'' paragraph</pre></td>
 first a &lt;strong&gt;bold and &lt;em&gt;italic &lt;u&gt;paragraph
 &lt;/u&gt;&lt;/em&gt;&lt;/strong&gt;&lt;/p&gt;
 
-&lt;h4&gt;Heading Level 4 &lt;/h4&gt;
+&lt;h4&gt;Heading Level 4&lt;/h4&gt;
 
 &lt;p&gt;
 &lt;strong&gt;&lt;em&gt;&lt;u&gt;and finish&lt;/u&gt;&lt;/em&gt;&lt;/strong&gt;&lt;em&gt;&lt;u&gt; with&lt;/u&gt; another&lt;/em&gt; paragraph

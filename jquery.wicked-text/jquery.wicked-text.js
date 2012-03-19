@@ -57,13 +57,14 @@
 		var line;
 
 		// Regular expressions to match each kind of line level format mark-up.
-		var re_blank = /^([ \t]*)$/;
-		var re_heading = /^(={1,6})[ \t]+([^=]+)(={1,6})[ \t]*$/;
-		var re_bullet = /^[ \t]+\*[ \t]+(.+)$/;
-		var re_numbered = /^[ \t]+#[ \t]+(.+)$/;
+		var re_blank = /^(\s*)$/;
+//		var re_heading = /^(={1,6})\s+([^=]+)(={1,6})\s*$/;
+		var re_heading = /^(={1,6})\s+(.+(?=\s+\1$))/;
+		var re_bullet = /^\s+\*\s+(.+)$/;
+		var re_numbered = /^\s+#\s+(.+)$/;
 		var re_mono_start = /^\{{3}$/;
 		var re_mono_end = /^\}{3}$/;
-		var re_blockquote = /^[ \t]+(.+)$/;
+		var re_blockquote = /^\s+(.+)$/;
 		var re_hr = /^-{4,}$/;
 		var matches;
 
@@ -79,7 +80,7 @@
 
 		// Individual mark-up regular expressions - also see the public ones
 		// near the bottom of the file.
-		var re_named_link = /^\[((((ftp|https?):\/\/)?[\-\w@:%_\+.~#?,&\/\/=]+)|((mailto:)?([_.\w\-]+@([\w][\w\-]+\.)+[a-zA-Z]{2,3})))([ \t]*([^\]]*))?\]$/;
+		var re_named_link = /^\[((((ftp|https?):\/\/)?[\-\w@:%_\+.~#?,&\/\/=]+)|((mailto:)?([_.\w\-]+@([\w][\w\-]+\.)+[a-zA-Z]{2,3})))(\s*([^\]]*))?\]$/;
 		var tn_monospace = "{{{";
 		var tn_monospace_end = "}}}";
 		var tn_bolditalic = "'''''";
