@@ -58,10 +58,10 @@
 
 		// Regular expressions to match each kind of line level format mark-up.
 		var re_blank = /^(\s*)$/;
-//		var re_heading = /^(={1,6})\s+([^=]+)(={1,6})\s*$/;
+		// var re_heading = /^(={1,6})\s+([^=]+)(={1,6})\s*$/;
 		var re_heading = /^(={1,6})\s+(.+(?=\s+\1$))/;
-		var re_bullet = /^\s+\*\s+(.+)$/;
-		var re_numbered = /^\s+#\s+(.+)$/;
+		var re_bullet = /^(\s+)\*\s+(.+)$/;
+		var re_numbered = /^(\s+)#\s+(.+)$/;
 		var re_mono_start = /^\{{3}$/;
 		var re_mono_end = /^\}{3}$/;
 		var re_blockquote = /^\s+(.+)$/;
@@ -74,6 +74,11 @@
 		var ulist = false;
 		var bq = false;
 		var mono = false;
+
+		// Hierarchical list handling
+		var listStack = [];
+		var listIndent = 0;
+		var tabSpaces = 4;
 
 		// Regular expression to find mark-up tokens in each line.
 		var regexToken = /(((ftp|https?):\/\/)[\-\w@:%_\+.~#?,&\/\/=]+)|((mailto:)?[_.\w-]+@([\w][\w\-]+\.)+[a-zA-Z]{2,3})|(!+\[)|(!*((_{2})|(\{{3})|(\}{3})|(~{2})|(\^)|(,{2})|('{2,5}))|(\[{1,2}[^\]]+\]{1,2}))/g;
@@ -124,6 +129,35 @@
 		};
 
 		/**
+		 * Count the number of spaces - including tab equivalent. Used to
+		 * determine hierarchical bulleted list indentation level.
+		 * 
+		 * @param {int}
+		 *            offset the offset from the start of line - use zero for
+		 *            the start of line.
+		 * @param {string}
+		 *            whitespace the spaces and other whitespace to count.
+		 * @return {int} number of spaces.
+		 */
+		var countSpaces = function(offset, whitespace)
+		{
+			var count = offset;
+			for( i = 0; i < whitespace.length; i++ )
+			{
+				if( whitespace.charAt( i ) == '\t' )
+				{
+					count += ++count % tabSpaces;
+				}
+				else if( whitespace.charAt( i ) == ' ' )
+				{
+					count++;
+				}
+			}
+
+			return count;
+		}
+
+		/**
 		 * Remove inline formatting at end of a block. Puts it on the
 		 * poppedStack to add at the start of the next block.
 		 * 
@@ -159,12 +193,26 @@
 			}
 			if( olist )
 			{
-				html += "</li>\n</ol>\n";
+				// Check if any levels need to be popped.
+				while( listStack.length > 0 )
+				{
+					// End the list.
+					html += endFormatting() + "</li>\n</ol>\n";
+					listIndent = listStack.pop();
+				}
+
 				olist = false;
 			}
 			if( ulist )
 			{
-				html += "</li>\n</ul>\n";
+				// Check if any levels need to be popped.
+				while( listStack.length > 0 )
+				{
+					// End the list.
+					html += endFormatting() + "</li>\n</ul>\n";
+					listIndent = listStack.pop();
+				}
+
 				ulist = false;
 			}
 			if( bq )
@@ -438,33 +486,90 @@
 			}
 			else if( (matches = line.match( re_bullet )) !== null )
 			{
-				if( ulist )
-				{
-					html += endFormatting() + "</li>\n";
-				}
-				else
+				if( !ulist )
 				{
 					endBlock();
-					html += "<ul>\n";
 					ulist = true;
 				}
 
-				html += "<li>" + restartFormatting() + formatText( matches[1] );
-			}
-			else if( (matches = line.match( re_numbered )) !== null )
-			{
-				if( olist )
+				// A new list item.
+				var indent = countSpaces( 0, matches[1] );
+				if( indent > listIndent )
 				{
-					html += endFormatting() + "</li>\n";
+					if( listStack.length > 0 )
+					{
+						html += endFormatting() + "\n";
+					}
+
+					// begin a new level
+					listStack.push( listIndent );
+					listIndent = indent;
+					
+					html += "<ul>\n";
+					html += "<li>" + restartFormatting()
+							+ formatText( matches[2] );
 				}
 				else
 				{
+					// Check if any levels need to be popped.
+					while( listStack.length > 0
+							&& listStack[listStack.length - 1] >= indent )
+					{
+						// End the list.
+						html += endFormatting() + "</li>\n</ul>\n";
+						listIndent = listStack.pop();
+					}
+
+					html += endFormatting() + "</li>\n";
+					html += "<li>" + restartFormatting()
+							+ formatText( matches[2] );
+				}
+			}
+			else if( (matches = line.match( re_numbered )) !== null )
+			{
+				if( !olist )
+				{
 					endBlock();
-					html += "<ol>\n";
 					olist = true;
 				}
 
-				html += "<li>" + restartFormatting() + formatText( matches[1] );
+				// A new list item.
+				var indent = countSpaces( 0, matches[1] );
+				if( indent > listIndent )
+				{
+					if( listStack.length > 0 )
+					{
+						html += endFormatting() + "\n";
+					}
+					else
+					{
+						endBlock();
+						olist = true;
+					}
+
+					// begin a new level
+					listStack.push( listIndent );
+					listIndent = indent;
+					
+					html += "<ol>\n";
+					html += "<li>" + restartFormatting()
+							+ formatText( matches[2] );
+				}
+				else
+				{
+					// Check if any levels need to be popped.
+					while( listStack.length > 0
+							&& listStack[listStack.length - 1] >= indent )
+					{
+						// End the list.
+						html += endFormatting() + "</li>\n</ol>\n";
+						listIndent = listStack.pop();
+					}
+
+					html += endFormatting() + "</li>\n";
+					html += "<li>" + restartFormatting()
+							+ formatText( matches[2] );
+				}
 			}
 			else if( line.match( re_mono_start ) )
 			{
@@ -538,7 +643,6 @@
 	 */
 	jQuery.wickedText.re_mail = /^(mailto:)?([_.\w\-]+@([\w][\w\-]+\.)+[a-zA-Z]{2,3})$/;
 
-	
 	/**
 	 * Create a HTML link from a URL and Display Text - default the display to
 	 * the URL (tidied up).
