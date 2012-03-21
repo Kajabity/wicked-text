@@ -68,19 +68,13 @@ td {
 				function(index, element)
 				{
 					countTests++;
+					var cells = $( "td", this );
 
 					//	get the source
-					var aa = $( "td:nth-child(2)>pre", this );
-					var bb = aa.text();
-					var cc = $.trim( bb );
-					var source = $( "td:nth-child(2)>pre", this ).text();
+					var source = $( "pre", cells[1] ).text();;
 
 					//	get the expected output
-					var dd = $( "td:nth-child(3)>pre", this );
-					var ee = dd.text();
-					var ff = $.trim( ee );
-					var expected = $.trim( $( "td:nth-child(3)>pre", this )
-							.text() );
+					var expected = $.trim( $( "pre", cells[2] ).text() );
 
 					//	call wicked text to get output
 					var result = $.trim( $.wickedText( source ) );
@@ -101,8 +95,8 @@ td {
 					}
 
 					//	Append actual result to final cell and set result class
-					$( "td", this ).addClass( resultClass );
-					$( "td:nth-child(4)", this ).append( $( "<pre></pre>" ).html( $.wickedText.safeText( result ) ) );
+					$( cells ).addClass( resultClass );
+					$( cells[3] ).append( $( "<pre></pre>" ).html( $.wickedText.safeText( result ) ) );
 				} );
 
 		// Finally, set the values in the summary table.
